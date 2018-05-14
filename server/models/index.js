@@ -1,8 +1,10 @@
+// Config
+const config = require('../../config');
 // MongoDb
 const MongoClient = require('mongodb').MongoClient;
 
 // Connection url
-const url = 'mongodb://karlen:1234@ds159180.mlab.com:59180/mydevelopers_list';
+const url = config.db.url;
 
 // Get Cities
 exports.getCities = (cb) => {
