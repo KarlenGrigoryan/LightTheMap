@@ -2,6 +2,6 @@ module.exports = {
 	port: 8000,
 	api: '/api',
 	db: {
-		url: 'mongodb://karlen:1234@ds159180.mlab.com:59180/mydevelopers_list'
+		url: 'mongodb://light_the_map:1234@ds219130.mlab.com:19130/light_the_map'
 	}
 }
