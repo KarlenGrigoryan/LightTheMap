@@ -11,5 +11,7 @@ module.exports = (app) => {
 	app.get(`${config.api}/get-popular-cities`, controllers.getPopularCities);
 
 	// Find Initiative
-	app.get(`${config.api}/find-initiative`, controllers.findInitiative)
+	app.get(`${config.api}/find-initiative`, controllers.findInitiative);
+	app.post(`${config.api}/find-initiative`, controllers.findInitiative);
+
 }

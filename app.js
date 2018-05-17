@@ -1,7 +1,13 @@
-const express =  require('express');
 const config = require('./config')
 
+const express =  require('express');
+const bodyParser = require('body-parser');
+
 const app = express();
+
+// Body Parser MW
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
 // Routing
 require('./server/routing')(app);

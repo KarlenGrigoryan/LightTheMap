@@ -24,7 +24,7 @@ exports.getPopularCities = (req, res) => {
 };
 
 exports.findInitiative = (req, res) => {
-	models.findInitiative(req.query, (err, response) => {
+	models.findInitiative(req.body, (err, response) => {
 		if(err) {
 			res.status(404).send({error: err});
 			return false
