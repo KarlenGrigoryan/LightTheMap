@@ -74,13 +74,14 @@ exports.findInitiative = (params, cb) => {
                     // Check if value is
                     if (params.value) {
                         // Check if tags is not empty and sort is empty
-                        if (params.tags.length !== 0 && Object.keys(params.sort).length === 0) {
+                        if (params.tags && !params.sort) {                            
                             params.tags.forEach(function (tag) {
                                 col.find({$and: [{$or: [{"address.city": params.value}, {"social_networks.email": params.value}]}, {$or: [{tags: {$all: [{"$elemMatch": {id: tag.id}}]}}]}]}).toArray((err, items) => {
                                     resolve(items)
                                 });
                             });
-                        } else if (Object.keys(params.sort).length !== 0 && params.tags.length === 0) { // Check if sort is not empty and tags is empty
+                        } else if (params.sort && !params.tags) { // Check if sort is not empty and tags is empty
+
                             // Check kind of sort
                             if (params.sort.release === 1 || params.sort.release === -1) {
                                 col.find({$or: [{"address.city": params.value}, {"social_networks.email": params.value}]}).sort({crated: params.sort.release}).toArray((err, items) => {
@@ -91,7 +92,7 @@ exports.findInitiative = (params, cb) => {
                                     resolve(items)
                                 });
                             }
-                        } else if (params.tags.length !== 0 && Object.keys(params.sort).length !== 0) { // Check if tags is not empty and sort is empty
+                        } else if (params.tags && params.sort) { // Check if tags is not empty and sort is empty                            
                             params.tags.forEach(function (tag) {
                                 // Check kind of sort
                                 if (params.sort.release === 1 || params.sort.release === -1) {
@@ -112,13 +113,13 @@ exports.findInitiative = (params, cb) => {
                         }
 
                     } else { // if value is empty
-                        if (params.tags.length !== 0 && Object.keys(params.sort).length === 0) { // Check if tags is not empty and sort is empty
+                        if (params.tags && !params.sort) { // Check if tags is not empty and sort is empty
                             params.tags.forEach(function (tag) {
                                 col.find({tags: {$elemMatch: {id: tag.id}}}).toArray((err, items) => {
                                     resolve(items)
                                 });
                             });
-                        } else if (Object.keys(params.sort).length !== 0 && params.tags.length === 0) {  // Check if sort is not empty and tags is empty
+                        } else if (params.sort && !params.tags) {  // Check if sort is not empty and tags is empty
                             // Check kind of sort
                             if (params.sort.release === 1 || params.sort.release === -1) {
                                 col.find({}).sort({crated: params.sort.release}).toArray((err, items) => {
@@ -129,7 +130,7 @@ exports.findInitiative = (params, cb) => {
                                     resolve(items)
                                 });
                             }
-                        } else if (params.tags.length !== 0 && Object.keys(params.sort).length !== 0) {// Check if tags is not empty and sort is empty
+                        } else if (params.tags && params.sort) {// Check if tags is not empty and sort is empty
                             params.tags.forEach(function (tag) {
                                 // Check kind of sort
                                 if (params.sort.release === 1 || params.sort.release === -1) {
