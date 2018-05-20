@@ -4,14 +4,23 @@ const config = require('../../config');
 const controllers = require('../controllers');
 
 module.exports = (app) => {
-	// Test api(get cities)
-	app.get(`${config.api}/get-cities`, controllers.getCities);
-	
-	// Get most popular cities
-	app.get(`${config.api}/get-popular-cities`, controllers.getPopularCities);
+    // Test api(get cities)
+    app.get(`${config.api}/get-cities`, controllers.getCities);
 
-	// Find Initiative
-	app.get(`${config.api}/find-initiative`, controllers.findInitiative);
-	app.post(`${config.api}/find-initiative`, controllers.findInitiative);
+    // Get most popular cities
+    app.get(`${config.api}/get-popular-cities`, controllers.getPopularCities);
 
-}
+    // Get Initiative details
+    app.get(`${config.api}/get-initiative-details`, controllers.getnitiativeDetails);
+
+    // Get tags
+    app.get(`${config.api}/get-tags`, controllers.getTags);
+
+    // Find Initiative
+    //app.get(`${config.api}/find-initiative`, controllers.findInitiative);
+    app.post(`${config.api}/find-initiative`, controllers.findInitiative);
+
+    // Add Initiative
+    app.post(`${config.api}/add-initiative`, controllers.addInitiative)
+
+};
