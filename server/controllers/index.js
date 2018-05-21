@@ -12,6 +12,17 @@ exports.getCities = (req, res) => {
     })
 };
 
+// Get cities count
+exports.getCitiesCount = (req, res) => {
+    models.getCitiesCount((err, response) => {
+        if (err) {
+            res.status(400).send({error: err});
+            return false
+        }
+        res.status(200).send({data: response})
+    })
+}
+
 // Get most popular cities
 exports.getPopularCities = (req, res) => {
     models.getPopularCities((err, response) => {

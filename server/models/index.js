@@ -18,14 +18,30 @@ exports.getCities = (cb) => {
     });
 };
 
+// Get cities count
+exports.getCitiesCount = (cb) => {
+    MongoClient.connect(url, (err, db) => {
+        // Create a collection we want to drop later
+        const col = db.collection('cities');
+        col.count({}, (err, count) => {
+            cb(err, {count: count})
+        });
+    });
+}
+
 // Get most popular cities
 exports.getPopularCities = (cb) => {
     MongoClient.connect(url, (err, db) => {
         // Create a collection we want to drop later
-        const col = db.collection('cities');
-        col.find({}).sort({rating: -1}).toArray((err, items) => {
+        const col = db.collection('initiatives');
+        // col.find({}).sort({rating: -1}).toArray((err, items) => {
+        //     cb(err, items)
+        // });
+        col.aggregate([{ $unwind: "$address" },  { $sortByCount: "$address" }]).toArray((err, items) => {
             cb(err, items)
         });
+        
+    
     })
 };
 
@@ -113,7 +129,9 @@ exports.findInitiative = (params, cb) => {
                         }
 
                     } else { // if value is empty
-                        if (params.tags && !params.sort) { // Check if tags is not empty and sort is empty
+                        if (params.tags.length > 0 && !params.sort) { // Check if tags is not empty and sort is empty
+                        console.log('value is empty')
+
                             params.tags.forEach(function (tag) {
                                 col.find({tags: {$elemMatch: {id: tag.id}}}).toArray((err, items) => {
                                     resolve(items)
@@ -130,7 +148,7 @@ exports.findInitiative = (params, cb) => {
                                     resolve(items)
                                 });
                             }
-                        } else if (params.tags && params.sort) {// Check if tags is not empty and sort is empty
+                        } else if (params.tags.length >  0 && params.sort) {// Check if tags is not empty and sort is empty
                             params.tags.forEach(function (tag) {
                                 // Check kind of sort
                                 if (params.sort.release === 1 || params.sort.release === -1) {
@@ -144,7 +162,11 @@ exports.findInitiative = (params, cb) => {
                                 }
 
                             });
-                        }
+                        }else {                            
+                            col.find({}).sort({rating: -1}).toArray((err, items) => {
+                                resolve(items)
+                            });
+                         }
                     }
 
                 });
