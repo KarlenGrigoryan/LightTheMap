@@ -37,7 +37,7 @@ exports.getPopularCities = (cb) => {
         // col.find({}).sort({rating: -1}).toArray((err, items) => {
         //     cb(err, items)
         // });
-        col.aggregate([{ $unwind: "$address" },  { $sortByCount: "$address" }]).toArray((err, items) => {
+        col.aggregate([{ $unwind: "$address.city" },  { $sortByCount: "$address.city" }]).toArray((err, items) => {
             cb(err, items)
         });
         
