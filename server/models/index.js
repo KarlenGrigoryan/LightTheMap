@@ -90,25 +90,7 @@ exports.findInitiative = (params, cb) => {
                     // Check if value is
                     if (params.value) {
                         // Check if tags is not empty and sort is empty
-                        if (params.tags && !params.sort) {                            
-                            params.tags.forEach(function (tag) {
-                                col.find({$and: [{$or: [{"address.city": params.value}, {"social_networks.email": params.value}]}, {$or: [{tags: {$all: [{"$elemMatch": {id: tag.id}}]}}]}]}).toArray((err, items) => {
-                                    resolve(items)
-                                });
-                            });
-                        } else if (params.sort && !params.tags) { // Check if sort is not empty and tags is empty
-
-                            // Check kind of sort
-                            if (params.sort.release === 1 || params.sort.release === -1) {
-                                col.find({$or: [{"address.city": params.value}, {"social_networks.email": params.value}]}).sort({crated: params.sort.release}).toArray((err, items) => {
-                                    resolve(items)
-                                });
-                            } else {
-                                col.find({$or: [{"address.city": params.value}, {"social_networks.email": params.value}]}).sort({rating: -1}).toArray((err, items) => {
-                                    resolve(items)
-                                });
-                            }
-                        } else if (params.tags && params.sort) { // Check if tags is not empty and sort is empty                            
+                        if (params.tags.length > 0) {
                             params.tags.forEach(function (tag) {
                                 // Check kind of sort
                                 if (params.sort.release === 1 || params.sort.release === -1) {
@@ -120,59 +102,77 @@ exports.findInitiative = (params, cb) => {
                                         resolve(items)
                                     });
                                 }
-
                             });
                         } else {
-                            col.find({$or: [{"address.city": params.value}, {"social_networks.email": params.value}]}).toArray((err, items) => {
-                                resolve(items)
-                            });
-                        }
-
-                    } else { // if value is empty
-                        if (params.tags.length > 0 && !params.sort) { // Check if tags is not empty and sort is empty
-                        console.log('value is empty')
-
-                            params.tags.forEach(function (tag) {
-                                col.find({tags: {$elemMatch: {id: tag.id}}}).toArray((err, items) => {
-                                    resolve(items)
-                                });
-                            });
-                        } else if (params.sort && !params.tags) {  // Check if sort is not empty and tags is empty
-                            // Check kind of sort
                             if (params.sort.release === 1 || params.sort.release === -1) {
-                                col.find({}).sort({crated: params.sort.release}).toArray((err, items) => {
+                                col.find({$or: [{"address.city": params.value}, {"social_networks.email": params.value}]}).sort({crated: params.sort.release}).toArray((err, items) => {
                                     resolve(items)
                                 });
                             } else {
-                                col.find({}).sort({rating: -1}).toArray((err, items) => {
+                                col.find({$or: [{"address.city": params.value}, {"social_networks.email": params.value}]}).sort({rating: -1}).toArray((err, items) => {
                                     resolve(items)
                                 });
                             }
-                        } else if (params.tags.length >  0 && params.sort) {// Check if tags is not empty and sort is empty
+
+                        }
+                    } else { // if value is empty
+
+                        if(params.tags.length > 0 ) {
                             params.tags.forEach(function (tag) {
                                 // Check kind of sort
                                 if (params.sort.release === 1 || params.sort.release === -1) {
-                                    col.find({}, {tags: {$all: [{"$elemMatch": {id: tag.id}}]}}).sort({crated: params.sort.release}).toArray((err, items) => {
+                                    col.find({tags: {$elemMatch: {id: tag.id}}}).sort({crated: params.sort.release}).toArray((err, items) => {
                                         resolve(items)
                                     });
                                 } else {
-                                    col.find({}, {tags: {$all: [{"$elemMatch": {id: tag.id}}]}}).sort({rating: -1}).toArray((err, items) => {
+                                    col.find({tags: {$elemMatch: {id: tag.id}}}).sort({rating: -1}).toArray((err, items) => {
                                         resolve(items)
                                     });
                                 }
+                            });
+                        }
 
-                            });
-                        }else {                            
-                            col.find({}).sort({rating: -1}).toArray((err, items) => {
-                                resolve(items)
-                            });
-                         }
+                        // if (params.tags.length > 0 && !params.sort) { // Check if tags is not empty and sort is empty
+                        // console.log('value is empty')
+                        //
+                        //     params.tags.forEach(function (tag) {
+                        //         col.find({tags: {$elemMatch: {id: tag.id}}}).toArray((err, items) => {
+                        //             resolve(items)
+                        //         });
+                        //     });
+                        // } else if (params.sort && !params.tags) {  // Check if sort is not empty and tags is empty
+                        //     // Check kind of sort
+                        //     if (params.sort.release === 1 || params.sort.release === -1) {
+                        //         col.find({}).sort({crated: params.sort.release}).toArray((err, items) => {
+                        //             resolve(items)
+                        //         });
+                        //     } else {
+                        //         col.find({}).sort({rating: -1}).toArray((err, items) => {
+                        //             resolve(items)
+                        //         });
+                        //     }
+                        // } else if (params.tags.length >  0 && params.sort.release !== undefined) {// Check if tags is not empty and sort is empty
+                        //     params.tags.forEach(function (tag) {
+                        //         // Check kind of sort
+                        //         if (params.sort.release === 1 || params.sort.release === -1) {
+                        //             col.find({}, {tags: {$all: [{"$elemMatch": {id: tag.id}}]}}).sort({crated: params.sort.release}).toArray((err, items) => {
+                        //                 resolve(items)
+                        //             });
+                        //         } else {
+                        //             col.find({}, {tags: {$all: [{"$elemMatch": {id: tag.id}}]}}).sort({rating: -1}).toArray((err, items) => {
+                        //                 resolve(items)
+                        //             });
+                        //         }
+                        //     });
+                        // }else {
+                        //     col.find({}).sort({rating: -1}).toArray((err, items) => {
+                        //         resolve(items)
+                        //     });
+                        //  }
                     }
-
                 });
                 return promise
             }
-
             getnitiatives({}).then((res) => {
                 cb(undefined, res)
             })
